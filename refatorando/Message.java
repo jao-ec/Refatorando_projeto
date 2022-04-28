@@ -32,17 +32,18 @@ public class Message{
 
         if(!aux)
         {
-            System.out.println("Unregisterede user.\nSorry try another user or try again latter.");
+            System.out.println("\nUnregisterede user.\nSorry try another user or try again latter.");
+            return;
         }
         else
         {
-            System.out.println("Message send successfully");
+            System.out.println("\nMessage send successfully");
         }
     }
 
     public void setMessage()
     {
-        System.out.println("Write bellow your message:\n=>");
+        System.out.printf("\nWrite bellow your message:\n=>");
         this.message = input.nextLine();
     }
 
@@ -53,7 +54,7 @@ public class Message{
 
     public void setTo_user()
     {
-        System.out.println("Who do you woukd like send the message:\n=>");
+        System.out.printf("\nWho do you woukd like send the message:\n=>");
         this.to_user = input.nextLine();
     }
 
