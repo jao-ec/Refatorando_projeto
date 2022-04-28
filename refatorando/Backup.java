@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Backup implements Base
 {   
     private String user;
@@ -8,15 +10,25 @@ public class Backup implements Base
     private String country;
     private String about;
 
-    public Backup(String user, String name, String gender,
-                  String age, String schooling, String country, String about)
+    ArrayList<Friend>    friends     = new ArrayList<Friend>();
+    ArrayList<Message>   messages    = new ArrayList<Message>();
+    ArrayList<Community> communities = new ArrayList<Community>();
+
+    public Backup(Profile backup)
     {
-        setName(user);
-        setName(name);
-        setGender(gender);
-        setAge(age);
-        setSchooling(schooling);
-        setAbout(about);
+        setUser(backup.getUser());
+        setName(backup.getName());
+        setGender(backup.getGender());
+        setAge(backup.getAge());
+        setSchooling(backup.getSchooling());
+        setAbout(backup.getAbout());
+        this.friends = (ArrayList<Friend>) backup.friends.clone();
+        this.messages = (ArrayList<Message>) backup.messages.clone();
+        
+        for(int i=0; i<backup.admin_communities.size(); i++)
+        {
+            communities.add(backup.admin_communities.get(i));
+        }
     }
 
     public String showBackup()
