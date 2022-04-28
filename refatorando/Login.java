@@ -18,7 +18,7 @@ public class Login
             return -1;
         }
 
-        System.out.printf("Username:\n=>");
+        System.out.printf("\nUsername:\n=>");
         user = input.nextLine();
         System.out.printf("Password:\n=>");
         password = input.nextLine();
@@ -43,10 +43,10 @@ public class Login
         else return index;
     }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public void menu(ArrayList<Profile> accounts, ArrayList<Backup> backups, int index)
+    public void menu(ArrayList<Profile> accounts, ArrayList<Backup> backups, ArrayList<Community> community, int index)
     {
         int choise, choise2, choise3, aux;
-        String user, res;
+        String user, res, name;
         boolean active = true, flag = true;
         Profile self = accounts.get(index);
 
@@ -183,7 +183,7 @@ public class Login
                 case 2:
                     System.out.printf("\n[1] - Creat community\n[2] - Add Community\n[3] - Send message\n"+
                                       "[4] - Make a post\n[5] - See posts\n[6] - See messages\n[7] - See members\n"+
-                                      "[8] - Exit\n=>");
+                                      "[8] - See communities\n[9] - Exit\n=>");
 
                     choise2 = input.nextInt();
                     input.nextLine();
@@ -191,29 +191,27 @@ public class Login
                     switch(choise2)
                     {
                         case 1:
-                            Community comunidade = new Community(self.getAbout());
+                            Community comunidade = new Community(self.getUser());
                             comunidade.members.add(new Friend(self.getUser()));
+                            community.add(comunidade);
                             self.admin_communities.add(comunidade);
                             break;
                         ////////////////////////////////////////////////////////////////////////////////////////////////
                         case 2:
                             System.out.printf("What is community' name:\n=>");
-                            user = input.nextLine();
+                            name = input.nextLine();
 
                             flag = false;
 
-                            for(int i=0; i<accounts.size(); i++)
+                            for(int i=0; i<community.size(); i++)
                             {
-                                for(int j=0; j<accounts.get(i).admin_communities.size(); j++)
+                                if(community.get(i).getCommunity_name().intern() == name.intern())
                                 {
-                                    if(accounts.get(i).admin_communities.get(j).getCommunity_name().intern() == user.intern())
-                                    {
-                                        accounts.get(i).admin_communities.get(j).members.add(new Friend(self.getUser()));
-                                        flag = true;
-                                        break;
-                                    }
+                                    community.get(i).members.add(new Friend(self.getUser()));
+                                    self.communities.add(community.get(i));
+                                    flag = true;
+                                    break;
                                 }
-                                if(flag) break;
                             }
 
                             if(!flag)
@@ -224,22 +222,18 @@ public class Login
                         ///////////////////////////////////////////////////////////////////////////////////////////////
                         case 3:
                             System.out.printf("What is community' name:\n=>");
-                                user = input.nextLine();
+                                name = input.nextLine();
 
                                 flag = false;
 
-                                for(int i=0; i<accounts.size(); i++)
+                                for(int i=0; i<community.size(); i++)
                                 {
-                                    for(int j=0; j<accounts.get(i).admin_communities.size(); j++)
+                                    if(community.get(i).getCommunity_name().intern() == name.intern())
                                     {
-                                        if(accounts.get(i).admin_communities.get(j).getCommunity_name().intern() == user.intern())
-                                        {
-                                            accounts.get(i).admin_communities.get(j).messages.add(new Message(accounts, self.getUser()));
-                                            flag = true;
-                                            break;
-                                        }
+                                        community.get(i).messages.add(new Message(accounts, self.getUser()));
+                                        flag = true;
+                                        break;
                                     }
-                                    if(flag) break;
                                 }
 
                                 if(!flag)
@@ -250,47 +244,36 @@ public class Login
                         ///////////////////////////////////////////////////////////////////////////////////////////////
                         case 4:
                             System.out.printf("You must to be on community to make a post!\nWhat is community' name:\n=>");
-                            user = input.nextLine();
+                            name = input.nextLine();
 
                             flag = false;
 
-                            for(int i=0; i<accounts.size(); i++)
+                            for(int i=0; i<community.size(); i++)
                             {
-                                for(int j=0; j<accounts.get(i).communities.size(); j++)
+                                if(community.get(i).getCommunity_name().intern() == name.intern())
                                 {
-                                    if(accounts.get(i).communities.get(j).getCommunity_name().intern() == user.intern())
-                                    {
-                                        Post poste = new Post();
-                                        System.out.println(poste.showPost());
-                                        poste.just_members = false;
-                                        accounts.get(i).communities.get(j).newsletters.add(poste);
-                                        flag = true;
-                                    }
-                                }
+                                    Post poste = new Post();
+                                    if(community.get(i).getUser_admin() == self.getUser())
+                                    {                                        
+                                        System.out.printf("\nWould you like only members to see this post?? [Y/N]\n=>");
+                                        res = input.nextLine();
 
-                                if(!flag)
-                                {
-                                    for(int j=0; j<accounts.get(i).admin_communities.size(); j++)
-                                    {
-                                        if(accounts.get(i).admin_communities.get(j).getCommunity_name().intern() == user.intern())
-                                        {
-                                            Post poste = new Post();
-
-                                            System.out.printf("\nWould you like only members to see this post?? [Y/N]\n=>");
-                                            res = input.nextLine();
-
-                                            if(res.toUpperCase().intern()== "Y"){
-                                                poste.just_members = true;
-                                            }
-                                            else
-                                            {
-                                                poste.just_members = false;
-                                            }
-
-                                            accounts.get(i).admin_communities.get(j).newsletters.add(poste);
-                                            flag = true;
+                                        if(res.toUpperCase() == "Y"){
+                                            poste.just_members = true;
                                         }
+                                        else
+                                        {
+                                            poste.just_members = false;
+                                        }                                        
                                     }
+                                    else
+                                    {
+                                        poste.just_members = false;
+                                    }
+                                    System.out.printf("\nPost made successfully.\n");
+                                    community.get(i).newsletters.add(poste);
+                                    flag = true;
+                                    break;
                                 }
                             }
 
@@ -302,22 +285,18 @@ public class Login
                         ///////////////////////////////////////////////////////////////////////////////////////////////
                         case 5:
                         System.out.printf("\nWhat is community' name:\n=>");
-                        user = input.nextLine();
+                        name = input.nextLine();
 
                         flag = false;
 
-                        for(int i=0; i<accounts.size(); i++)
+                        for(int i=0; i<community.size(); i++)
                         {
-                            for(int j=0; j<accounts.get(i).admin_communities.size(); j++)
+                            if(community.get(i).getCommunity_name().intern() == name.intern())
                             {
-                                if(accounts.get(i).admin_communities.get(j).getCommunity_name().intern() == user.intern())
-                                {
-                                    accounts.get(i).admin_communities.get(j).posts(self);
-                                    flag = true;
-                                    break;
-                                }
+                                community.get(i).posts(self);
+                                flag = true;
+                                break;
                             }
-                            if(flag) break;
                         }
 
                         if(!flag)
@@ -328,24 +307,21 @@ public class Login
                     ///////////////////////////////////////////////////////////////////////////////////////////////
                     case 6:
                         System.out.printf("\nYou must be the community admin!\nWhat is community' name\n=>");
-                        user = input.nextLine();
+                        name = input.nextLine();
 
                         flag = false;
 
-                        for(int i=0; i<accounts.size(); i++)
+                        for(int i=0; i<community.size(); i++)
                         {
-                            for(int j=0; j<accounts.get(i).admin_communities.size(); j++)
+                            if(community.get(i).getCommunity_name().intern() == name.intern() && community.get(i).getUser_admin().intern() == self.getUser().intern())
                             {
-                                if(accounts.get(i).admin_communities.get(j).getCommunity_name().intern() == user.intern())
+                                for(int j=0; j<community.get(i).messages.size(); j++)
                                 {
-                                    for(int k=0; i<accounts.get(i).admin_communities.get(j).messages.size(); k++)
-                                    {
-                                        accounts.get(i).admin_communities.get(j).messages.get(k).show_message();
-                                        input.nextLine();
-                                    }
+                                    System.out.printf(community.get(i).messages.get(j).show_message());
                                     flag = true;
                                 }
                             }
+                            if(flag) break;
                         }
 
                         if(!flag)
@@ -355,20 +331,19 @@ public class Login
                         break;
                     ////////////////////////////////////////////////////////////////////////////////////////////////
                     case 7:
-                        System.out.printf("\nYou must be the community admin!\nWhat is community' name\n=>");
-                        user = input.nextLine();
+                        System.out.printf("\nWhat is community' name\n=>");
+                        name = input.nextLine();
 
                         flag = false;
 
-                        for(int i=0; i<accounts.size(); i++)
+                        for(int i=0; i<community.size(); i++)
                         {
-                            for(int j=0; j<accounts.get(i).admin_communities.size(); j++)
+                            if(community.get(i).getCommunity_name().intern() == name.intern())
                             {
-                                if(accounts.get(i).admin_communities.get(j).getCommunity_name().intern() == user.intern())
-                                {
-                                    accounts.get(i).admin_communities.get(j).showMembers();
-                                    flag = true;
-                                }
+                                System.out.printf("\n");
+                                community.get(i).showMembers();
+                                flag = true;
+                                break;
                             }
                         }
 
@@ -379,6 +354,7 @@ public class Login
                         break;
                     ///////////////////////////////////////////////////////////////////////////////////////////////
                     case 8:
+                        self.showCommunities();
                         break;
                     ///////////////////////////////////////////////////////////////////////////////////////////////
                     default:
