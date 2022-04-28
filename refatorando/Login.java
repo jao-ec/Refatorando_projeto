@@ -14,7 +14,7 @@ public class Login
 
         if(accounts.isEmpty())
         {
-            System.out.println("No registers.\n\n");
+            System.out.printf("\nNo registers.\n");
             return -1;
         }
 
@@ -36,193 +36,390 @@ public class Login
 
         if(!check)
         {
-            System.out.println("User or Password are incorrect.");
+            System.out.println("\nUser or Password are incorrect.");
             input.nextLine();
             return -1;
         }
         else return index;
     }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public void menu(ArrayList<Profile> accounts, ArrayList<Backup> backups, int index)
     {
-        int choise;
-        boolean active = true;
+        int choise, choise2, choise3, aux;
+        String user, res;
+        boolean active = true, flag = true;
         Profile self = accounts.get(index);
 
         while(active)
         {
             System.out.println(self.showPerfil());
-            System.out.printf("\n[1] - Edit perfil\n[2] - Analiser invites\n[3] - Send invite\n[4] - Send message\n[5] - Show messages\n"+
-                              "[6] - Delete all message\n[7] - creat community\n[8] - Show Communities\n[9] - Show communities on community\n"+
-                              "[10] - Entry on community\n[11] - Show members of a community\n[12] - Post on my communities\n[13] - Show posts\n[14] - Exit\n=>");
+            System.out.printf("\n[1] - Profile\n[2] - My communities\n[3] - Recover data\n[4] - Delete my account\n[5] - Exit\n=>");
             choise = input.nextInt();
             input.nextLine();
             
             switch(choise)
             {
                 case 1:
-                    self.edit();
-                    break;
+                    System.out.printf("\n[1] - Edit\n[2] - Add friend\n[3] - Invites\n"+
+                                        "[4] - Send Message\n[5] - Read messages\n"+
+                                        "[6] - Friends\n[7] - Communities\n[8] - Exit\n=>");
+                    choise2 = input.nextInt();
+                    input.nextLine();
 
+                    switch(choise2)
+                    {
+                        case 1:
+                            System.out.printf("\nWhat attribute do you want to edit?\n"+
+                                              "[1] - All attributes\n[2] - Name\n"+
+                                              "[3] - Gender\n[4] - Age\n[5] - Schooling\n"+
+                                              "[6] - Country\n[7] - About\n[8] - Exit\n=>");
+                            choise3 = input.nextInt();
+                            input.nextLine();
+
+                            switch(choise3)
+                            {
+                                case 1:
+                                    self.edit();
+                                    break;
+                                case 2:
+                                    self.setName();
+                                    break;
+                                case 3:
+                                    self.setGender();
+                                    break;
+                                case 4:
+                                    self.setAge();
+                                    break;
+                                case 5:
+                                    self.setSchooling();
+                                    break;
+                                case 6:
+                                    self.setCountry();
+                                    break;
+                                case 7:
+                                    self.setAbout();
+                                    break;
+                                case 8:
+                                    break;
+                                default:
+                                    break;
+                            }
+                            break;
+                        ///////////////////////////////////////////////////////////////////////////
+                        case 2:
+                            Invite convite = new Invite();
+                            convite.setUsername(self.getUser());
+        
+                            System.out.printf("\nWhat user would you like send a invite?\n=>");
+                            user = input.nextLine();
+        
+                            aux = searcher.search(accounts, user.intern());
+
+                            if(aux >= 0)
+                            {
+                                convite.setInvite(self.apresentation(accounts.get(aux)));
+                                accounts.get(aux).invites.add(convite);
+                                System.out.printf("\nInvite send succefully.\n");
+                            }
+                            else
+                            {
+                                System.out.printf("\nThis user is not registered yet.\n");
+                            }
+                            break;
+                        /////////////////////////////////////////////////////////////////////////////
+                        case 3:
+                            if(self.invites.size() == 0)
+                            {
+                                System.out.printf("\nYou do not have any invite by for now.\n");
+                            }
+                            else
+                            {
+                                for(int i=0; i<self.invites.size(); i++)
+                                {
+                                    System.out.println("\n"+self.invites.get(i).getInvite_message());
+                                    String user_friend = self.invites.get(i).getUsername();
+
+                                    System.out.printf("Do you accept? [Y/N]");
+                                    res = input.nextLine();
+
+                                    if(res.toUpperCase().intern() == "Y")
+                                    {
+                                        Friend amigo1 = new Friend(self.getUser());
+                                        Friend amigo2 = new Friend(accounts.get(searcher.search(accounts, user_friend)).getUser());
+
+                                        self.friends.add(amigo2);
+                                        accounts.get(searcher.search(accounts, user_friend)).friends.add(amigo1);
+                                    }
+                                }
+                                self.invites.clear();
+                            }
+                            break;
+                        //////////////////////////////////////////////////////////////////////////////////
+                        case 4:
+                            Message mensagem = new Message(accounts, self.getUser().intern());
+                            accounts.get(searcher.search(accounts, mensagem.getTo().intern())).messages.add(mensagem);
+                            break;
+                        //////////////////////////////////////////////////////////////////////////////////
+                        case 5:
+                            self.showMessages();
+                            break;
+                        //////////////////////////////////////////////////////////////////////////////////
+                        case 6:
+                            self.showFriends();
+                            break;
+                        //////////////////////////////////////////////////////////////////////////////////
+                        case 7:
+                            self.showCommunities();
+                            break;       
+                        /////////////////////////////////////////////////////////////////////////////////
+                        case 8:
+                            break;
+                        ////////////////////////////////////////////////////////////////////////////////
+                        default:
+                            break;                
+                    }
+                    break;
+                
                 case 2:
-                    if(self.invites.isEmpty())
-                    {
-                        System.out.println("You do not have any invite by for now.");
-                    }
-                    else
-                    {
-                        for(int i=0; i<self.invites.size(); i++)
-                        {
-                            System.out.println(self.invites.get(i).getInvite_message());
-                            String user_friend = self.invites.get(i).getUsername();
+                    System.out.printf("\n[1] - Creat community\n[2] - Add Community\n[3] - Send message\n"+
+                                      "[4] - Make a post\n[5] - See posts\n[6] - See messages\n[7] - See members\n"+
+                                      "[8] - Exit\n=>");
 
-                            System.out.println("Do you accept? [Y/N]");
-                            String aux = input.nextLine();
+                    choise2 = input.nextInt();
+                    input.nextLine();
 
-                            if(aux.intern() == "Y".intern())
+                    switch(choise2)
+                    {
+                        case 1:
+                            Community comunidade = new Community(self.getAbout());
+                            comunidade.members.add(new Friend(self.getUser()));
+                            self.admin_communities.add(comunidade);
+                            break;
+                        ////////////////////////////////////////////////////////////////////////////////////////////////
+                        case 2:
+                            System.out.printf("What is community' name:\n=>");
+                            user = input.nextLine();
+
+                            flag = false;
+
+                            for(int i=0; i<accounts.size(); i++)
                             {
-                                Friend amigo1 = new Friend(self.getUser());
-                                Friend amigo2 = new Friend(accounts.get(searcher.search(accounts, user_friend)).getUser());
+                                for(int j=0; j<accounts.get(i).admin_communities.size(); j++)
+                                {
+                                    if(accounts.get(i).admin_communities.get(j).getCommunity_name().intern() == user.intern())
+                                    {
+                                        accounts.get(i).admin_communities.get(j).members.add(new Friend(self.getUser()));
+                                        flag = true;
+                                        break;
+                                    }
+                                }
+                                if(flag) break;
+                            }
 
-                                self.friends.add(amigo2);
-                                accounts.get(searcher.search(accounts, user_friend)).friends.add(amigo1);
+                            if(!flag)
+                            {
+                                System.out.println("This community does not exist\n");
+                            }
+                            break;
+                        ///////////////////////////////////////////////////////////////////////////////////////////////
+                        case 3:
+                            System.out.printf("What is community' name:\n=>");
+                                user = input.nextLine();
+
+                                flag = false;
+
+                                for(int i=0; i<accounts.size(); i++)
+                                {
+                                    for(int j=0; j<accounts.get(i).admin_communities.size(); j++)
+                                    {
+                                        if(accounts.get(i).admin_communities.get(j).getCommunity_name().intern() == user.intern())
+                                        {
+                                            accounts.get(i).admin_communities.get(j).messages.add(new Message(accounts, self.getUser()));
+                                            flag = true;
+                                            break;
+                                        }
+                                    }
+                                    if(flag) break;
+                                }
+
+                                if(!flag)
+                                {
+                                    System.out.println("This community does not exist\n");
+                                }
+                                break;
+                        ///////////////////////////////////////////////////////////////////////////////////////////////
+                        case 4:
+                            System.out.printf("You must to be on community to make a post!\nWhat is community' name:\n=>");
+                            user = input.nextLine();
+
+                            flag = false;
+
+                            for(int i=0; i<accounts.size(); i++)
+                            {
+                                for(int j=0; j<accounts.get(i).communities.size(); j++)
+                                {
+                                    if(accounts.get(i).communities.get(j).getCommunity_name().intern() == user.intern())
+                                    {
+                                        Post poste = new Post();
+                                        System.out.println(poste.showPost());
+                                        poste.just_members = false;
+                                        accounts.get(i).communities.get(j).newsletters.add(poste);
+                                        flag = true;
+                                    }
+                                }
+
+                                if(!flag)
+                                {
+                                    for(int j=0; j<accounts.get(i).admin_communities.size(); j++)
+                                    {
+                                        if(accounts.get(i).admin_communities.get(j).getCommunity_name().intern() == user.intern())
+                                        {
+                                            Post poste = new Post();
+
+                                            System.out.printf("\nWould you like only members to see this post?? [Y/N]\n=>");
+                                            res = input.nextLine();
+
+                                            if(res.toUpperCase().intern()== "Y"){
+                                                poste.just_members = true;
+                                            }
+                                            else
+                                            {
+                                                poste.just_members = false;
+                                            }
+
+                                            accounts.get(i).admin_communities.get(j).newsletters.add(poste);
+                                            flag = true;
+                                        }
+                                    }
+                                }
+                            }
+
+                            if(!flag)
+                            {
+                                System.out.printf("\nThis community does not exist\n");
+                            }
+                            break;
+                        ///////////////////////////////////////////////////////////////////////////////////////////////
+                        case 5:
+                        System.out.printf("\nWhat is community' name:\n=>");
+                        user = input.nextLine();
+
+                        flag = false;
+
+                        for(int i=0; i<accounts.size(); i++)
+                        {
+                            for(int j=0; j<accounts.get(i).admin_communities.size(); j++)
+                            {
+                                if(accounts.get(i).admin_communities.get(j).getCommunity_name().intern() == user.intern())
+                                {
+                                    accounts.get(i).admin_communities.get(j).posts(self);
+                                    flag = true;
+                                    break;
+                                }
+                            }
+                            if(flag) break;
+                        }
+
+                        if(!flag)
+                        {
+                            System.out.println("\nThis community does not exist\n");
+                        }
+                        break;
+                    ///////////////////////////////////////////////////////////////////////////////////////////////
+                    case 6:
+                        System.out.printf("\nYou must be the community admin!\nWhat is community' name\n=>");
+                        user = input.nextLine();
+
+                        flag = false;
+
+                        for(int i=0; i<accounts.size(); i++)
+                        {
+                            for(int j=0; j<accounts.get(i).admin_communities.size(); j++)
+                            {
+                                if(accounts.get(i).admin_communities.get(j).getCommunity_name().intern() == user.intern())
+                                {
+                                    for(int k=0; i<accounts.get(i).admin_communities.get(j).messages.size(); k++)
+                                    {
+                                        accounts.get(i).admin_communities.get(j).messages.get(k).show_message();
+                                        input.nextLine();
+                                    }
+                                    flag = true;
+                                }
                             }
                         }
-                        self.invites.clear();
+
+                        if(!flag)
+                        {
+                            System.out.println("\nThis community does not exist\n");
+                        }
+                        break;
+                    ////////////////////////////////////////////////////////////////////////////////////////////////
+                    case 7:
+                        System.out.printf("\nYou must be the community admin!\nWhat is community' name\n=>");
+                        user = input.nextLine();
+
+                        flag = false;
+
+                        for(int i=0; i<accounts.size(); i++)
+                        {
+                            for(int j=0; j<accounts.get(i).admin_communities.size(); j++)
+                            {
+                                if(accounts.get(i).admin_communities.get(j).getCommunity_name().intern() == user.intern())
+                                {
+                                    accounts.get(i).admin_communities.get(j).showMembers();
+                                    flag = true;
+                                }
+                            }
+                        }
+
+                        if(!flag)
+                        {
+                            System.out.printf("\nThis community does not exist\n");
+                        }
+                        break;
+                    ///////////////////////////////////////////////////////////////////////////////////////////////
+                    case 8:
+                        break;
+                    ///////////////////////////////////////////////////////////////////////////////////////////////
+                    default:
+                        break;                
                     }
                     break;
-
+                ///////////////////////////////////////////////////////////////////////////////////////////////////
                 case 3:
-                    Invite convite = new Invite();
-                    convite.setUsername(self.getUser());
-
-                    System.out.print("What user would you like send a invite?\n=>");
-                    String user = input.nextLine();
-
-                    int aux = searcher.search(accounts, user.intern());
-
-                    if(aux >= 0)
+                    if(backups.isEmpty())
                     {
-                        convite.setInvite(self.apresentation(accounts.get(aux)));
-                        accounts.get(aux).invites.add(convite);
-                        System.out.println("Invite send succefully.\n");
+                        System.out.printf("\nThere is no account deleted\n");
                     }
                     else
                     {
-                        System.out.println("This user is not registered yet.\n");
+                        System.out.printf("\nWhich user to recover data:\n=>");
+                        user = input.nextLine();
+
+                        for(int i=0; i<backups.size(); i++)
+                        {
+                            if(backups.get(i).getUser().intern() == user.intern())
+                            {
+                                System.out.println("\n"+backups.get(i).showBackup());
+                                break;
+                            }
+                        }
                     }
                     break;
-                
+                ///////////////////////////////////////////////////////////////////////////////////////////////////    
                 case 4:
-                    Message mensagem = new Message(accounts, self.getUser().intern());
-                    accounts.get(searcher.search(accounts, mensagem.getTo().intern())).messages.add(mensagem);
-                    break;
-                
-                case 5:
-                    self.showMessages();
-                    break; 
-
-                case 6:
-                    self.messages.clear();
-                    break;
-
-                case 7:
-                    Community comunidade = new Community(self.getUser());
-                    comunidade.members.add(new Friend(self.getUser().intern()));
-                    self.communities.add(comunidade);
-                    break;
-
-                case 8: 
-                    self.showCommunities();
-                    break;
-                
-                case 9:
-                    for(int i=0; i<accounts.size(); i++)
-                    {
-                        for(int j=0; j<accounts.get(i).communities.size(); j++)
-                        {
-                            if(accounts.get(i).communities.get(j).getUser_admin().intern() == accounts.get(i).getUser().intern())
-                            {
-                                System.out.println(accounts.get(i).communities.get(j).showCommunity());
-                            }
-                        }
-                    }
-                    break;
-                
-                case 10:
-                    System.out.printf("What is community' name:\n=>");
-                    String name = input.nextLine();
-                    boolean flag = false;
-
-                    for(int i=0; i<accounts.size(); i++)
-                    {
-                        for(int j=0; j<accounts.get(i).communities.size(); j++)
-                        {
-                            if(accounts.get(i).communities.get(j).getCommunity_name().intern() == name.intern())
-                            {
-                                accounts.get(i).communities.get(j).members.add(new Friend(self.getUser()));
-                                flag = true;
-                                break;
-                            }
-                        }
-                        if(flag == true) break;
-                    }
-                    break;
-                
-                case 11:
-                    System.out.printf("What is community' name:\n=>");
-                    name = input.nextLine();
-                    flag = false;
-
-                    for(int i=0; i<accounts.size(); i++)
-                    {
-                        for(int j=0; j<accounts.get(i).communities.size(); j++)
-                        {
-                            if(accounts.get(i).communities.get(j).getCommunity_name().intern() == name.intern())
-                            {
-                                accounts.get(i).communities.get(j).showMembers();
-                                flag = true;
-                                break;
-                            }
-                        }
-                        if(flag) break;
-                    }
-                    break;
-                
-                case 12:
-                    System.out.printf("What is community' name:\n=>");
-                    name = input.nextLine();
-
-                    for(int i=0; i<self.communities.size(); i++)
-                    {
-                        if(self.communities.get(i).getCommunity_name().intern() == name.intern())
-                        {
-                            self.communities.get(i).newsletters.add(new Post());
-                        }
-                    }
-                    break;
-                
-                case 13:
-                    System.out.printf("What is community' name:\n=>");
-                    name = input.nextLine();
-
-                    for(int i=0; i<self.communities.size(); i++)
-                    {
-                        if(self.communities.get(i).getCommunity_name().intern() == name.intern())
-                        {
-                            self.communities.get(i).posts();
-                        }
-                    }
-                    break;
-                    
-                case 14:
+                    Backup conta = new Backup(self);
+                    accounts.remove(accounts.get(searcher.search(accounts, self.getUser())));
+                    backups.add(conta);
                     active = false;
                     break;
-
-                default: 
+                ///////////////////////////////////////////////////////////////////////////////////////////////////
+                case 5:
+                    active = false;
                     break;
+                default:
+                    break;                    
             }
         }
-
     }
 }
