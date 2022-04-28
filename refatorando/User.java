@@ -7,7 +7,7 @@ public class User implements Base
 
     protected String user;
     protected String password;
-    private String name      = "edit_name";
+    private String name;
     private String gender    = "edit_gender";
     private String age       = "edit_age";
     private String schooling = "edit_schooling";
@@ -74,7 +74,7 @@ public class User implements Base
 
     public void setAbout()
     {
-        System.out.printf("What you would like say:\n=>");
+        System.out.printf("What you would like say about you:\n=>");
         this.about = input.nextLine();
     }
 
