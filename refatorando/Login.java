@@ -53,7 +53,7 @@ public class Login
         while(active)
         {
             System.out.println(self.showPerfil());
-            System.out.printf("\n[1] - Profile\n[2] - My communities\n[3] - Recover data\n[4] - Delete my account\n[5] - Exit\n=>");
+            System.out.printf("\n[1] - Profile\n[2] - Community\n[3] - Recover data\n[4] - Delete my account\n[5] - Exit\n=>");
             choise = input.nextInt();
             input.nextLine();
             
@@ -181,9 +181,7 @@ public class Login
                     break;
                 
                 case 2:
-                    System.out.printf("\n[1] - Creat community\n[2] - Add Community\n[3] - Send message\n"+
-                                      "[4] - Make a post\n[5] - See posts\n[6] - See messages\n[7] - See members\n"+
-                                      "[8] - See communities\n[9] - Exit\n=>");
+                    System.out.printf("\n[1] - Creat community\n[2] - Search community\n[3] - My communities\n[4] - Exit\n=>");
 
                     choise2 = input.nextInt();
                     input.nextLine();
@@ -198,7 +196,7 @@ public class Login
                             break;
                         ////////////////////////////////////////////////////////////////////////////////////////////////
                         case 2:
-                            System.out.printf("What is community' name:\n=>");
+                            System.out.printf("\nWhat is community' name:\n=>");
                             name = input.nextLine();
 
                             flag = false;
@@ -207,8 +205,7 @@ public class Login
                             {
                                 if(community.get(i).getCommunity_name().intern() == name.intern())
                                 {
-                                    community.get(i).members.add(new Friend(self.getUser()));
-                                    self.communities.add(community.get(i));
+                                    community.get(i).menuCommunity(self);
                                     flag = true;
                                     break;
                                 }
@@ -216,149 +213,25 @@ public class Login
 
                             if(!flag)
                             {
-                                System.out.println("This community does not exist\n");
+                                System.out.println("\nThis community does not exist\n");
                             }
                             break;
                         ///////////////////////////////////////////////////////////////////////////////////////////////
                         case 3:
-                            System.out.printf("What is community' name:\n=>");
-                                name = input.nextLine();
-
-                                flag = false;
-
-                                for(int i=0; i<community.size(); i++)
-                                {
-                                    if(community.get(i).getCommunity_name().intern() == name.intern())
-                                    {
-                                        community.get(i).messages.add(new Message(accounts, self.getUser()));
-                                        flag = true;
-                                        break;
-                                    }
-                                }
-
-                                if(!flag)
-                                {
-                                    System.out.println("This community does not exist\n");
-                                }
-                                break;
-                        ///////////////////////////////////////////////////////////////////////////////////////////////
-                        case 4:
-                            System.out.printf("You must to be on community to make a post!\nWhat is community' name:\n=>");
-                            name = input.nextLine();
-
-                            flag = false;
-
-                            for(int i=0; i<community.size(); i++)
+                            if(self.communities.isEmpty())
                             {
-                                if(community.get(i).getCommunity_name().intern() == name.intern())
-                                {
-                                    Post poste = new Post();
-                                    if(community.get(i).getUser_admin() == self.getUser())
-                                    {                                        
-                                        System.out.printf("\nWould you like only members to see this post?? [Y/N]\n=>");
-                                        res = input.nextLine();
-
-                                        if(res.toUpperCase() == "Y"){
-                                            poste.just_members = true;
-                                        }
-                                        else
-                                        {
-                                            poste.just_members = false;
-                                        }                                        
-                                    }
-                                    else
-                                    {
-                                        poste.just_members = false;
-                                    }
-                                    System.out.printf("\nPost made successfully.\n");
-                                    community.get(i).newsletters.add(poste);
-                                    flag = true;
-                                    break;
-                                }
+                                System.out.println("\nYou not be in any community\n");
                             }
-
-                            if(!flag)
+                            for(int i=0; i<self.communities.size(); i++)
                             {
-                                System.out.printf("\nThis community does not exist\n");
+                                System.out.println("\n"+self.communities.get(i).showCommunity()+"\n");
+                                input.nextLine();
                             }
                             break;
+                        
                         ///////////////////////////////////////////////////////////////////////////////////////////////
-                        case 5:
-                        System.out.printf("\nWhat is community' name:\n=>");
-                        name = input.nextLine();
-
-                        flag = false;
-
-                        for(int i=0; i<community.size(); i++)
-                        {
-                            if(community.get(i).getCommunity_name().intern() == name.intern())
-                            {
-                                community.get(i).posts(self);
-                                flag = true;
-                                break;
-                            }
-                        }
-
-                        if(!flag)
-                        {
-                            System.out.println("\nThis community does not exist\n");
-                        }
-                        break;
-                    ///////////////////////////////////////////////////////////////////////////////////////////////
-                    case 6:
-                        System.out.printf("\nYou must be the community admin!\nWhat is community' name\n=>");
-                        name = input.nextLine();
-
-                        flag = false;
-
-                        for(int i=0; i<community.size(); i++)
-                        {
-                            if(community.get(i).getCommunity_name().intern() == name.intern() && community.get(i).getUser_admin().intern() == self.getUser().intern())
-                            {
-                                for(int j=0; j<community.get(i).messages.size(); j++)
-                                {
-                                    System.out.printf(community.get(i).messages.get(j).show_message());
-                                    flag = true;
-                                }
-                            }
-                            if(flag) break;
-                        }
-
-                        if(!flag)
-                        {
-                            System.out.println("\nThis community does not exist\n");
-                        }
-                        break;
-                    ////////////////////////////////////////////////////////////////////////////////////////////////
-                    case 7:
-                        System.out.printf("\nWhat is community' name\n=>");
-                        name = input.nextLine();
-
-                        flag = false;
-
-                        for(int i=0; i<community.size(); i++)
-                        {
-                            if(community.get(i).getCommunity_name().intern() == name.intern())
-                            {
-                                System.out.printf("\n");
-                                community.get(i).showMembers();
-                                flag = true;
-                                break;
-                            }
-                        }
-
-                        if(!flag)
-                        {
-                            System.out.printf("\nThis community does not exist\n");
-                        }
-                        break;
-                    ///////////////////////////////////////////////////////////////////////////////////////////////
-                    case 8:
-                        self.showCommunities();
-                        break;
-                    ///////////////////////////////////////////////////////////////////////////////////////////////
-                    default:
-                        break;                
+                        case 4:
+                            break;                
                     }
                     break;
                 ///////////////////////////////////////////////////////////////////////////////////////////////////
