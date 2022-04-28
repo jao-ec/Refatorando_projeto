@@ -15,7 +15,7 @@ public class Register
             {
                 if(this.entire.getUser().intern() == (accounts.get(i).getUser()).intern())
                 {
-                    System.out.println("This user already is registed!");
+                    System.out.printf("\nThis user already is registed!\n");
                     return;
                 }
             }
