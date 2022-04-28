@@ -4,8 +4,9 @@ public class Post
 {
     Scanner input = new Scanner(System.in);
 
-    public String title;
-    public String content;
+    private String title;
+    private String content;
+    public boolean just_members;
      
     public Post()
     {
@@ -20,13 +21,13 @@ public class Post
 
     public void setTitle()
     {
-        System.out.println("What is your title post:\n=>");
+        System.out.printf("\nWhat is your title post:\n=>");
         this.title = input.nextLine();
     }
 
     public void setcontent()
     {
-        System.out.println("What is your post:\n=>");
+        System.out.printf("\nWhat is your post:\n=>");
         this.content = input.nextLine();
     }
 }
