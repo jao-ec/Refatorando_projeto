@@ -5,8 +5,9 @@ public class Community {
 
     Scanner input = new Scanner(System.in);
 
-    ArrayList<Friend>   members = new ArrayList<Friend>();
-    ArrayList<Post> newsletters = new ArrayList<Post>();
+    ArrayList<Friend>   members     = new ArrayList<Friend>();
+    ArrayList<Post>     newsletters = new ArrayList<Post>();
+    ArrayList<Message>  messages    = new ArrayList<Message>();
 
     private String user_admin;
     private String name_community;
@@ -30,19 +31,41 @@ public class Community {
                "Community about: "+this.about_community+"\n";
     }
 
-    public void posts()
+    public void posts(Profile self)
     {
+        boolean flag = true;
+
         if(!newsletters.isEmpty())
         {
-            System.out.println("This community does not have any post.");
+            System.out.println("\nThis community does not have any post.");
             input.nextLine();
         }
         else
         {
-            for(int i=0; i<newsletters.size(); i++)
+            for(int i=0; i<this.members.size(); i++)
             {
-                newsletters.get(i).showPost();
-                input.nextLine();
+                if(this.members.get(i).getUsername().intern() == self.getUser().intern())
+                {
+                    for(int j=0; j<newsletters.size(); j++)
+                    {
+                        newsletters.get(j).showPost();
+                        flag = true;
+                        input.nextLine();
+                    }
+                    break;
+                }
+            }
+
+            if(!flag)
+            {
+                for(int j=0; j<newsletters.size(); j++)
+                {
+                    if(newsletters.get(j).just_members == false)
+                    {
+                        newsletters.get(j).showPost();
+                        input.nextLine();
+                    }
+                }
             }
         }
     }
@@ -62,19 +85,19 @@ public class Community {
 
     private void setName_community()
     {
-        System.out.println("what is your community name:\n=>");
+        System.out.printf("\nwhat is your community name:\n=>");
         this.name_community = input.nextLine();
     }
 
     private void setTheme_community()
     {
-        System.out.println("what is your community theme:\n=>");
+        System.out.printf("\nwhat is your community theme:\n=>");
         this.theme_community = input.nextLine();
     }
 
     private void setAbout_community()
     {
-        System.out.println("what is your community are:\n=>");
+        System.out.printf("\nwhat is your community are:\n=>");
         this.about_community = input.nextLine();
     }
 
