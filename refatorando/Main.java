@@ -9,6 +9,7 @@ public class Main {
     {
         ArrayList<Profile> accounts = new ArrayList<Profile>();
         ArrayList<Backup> backups = new ArrayList<Backup>();
+        ArrayList<Community> community = new ArrayList<Community>();
         boolean active = true;
         int choise;
 
@@ -28,7 +29,7 @@ public class Main {
 
                     if(index > -1)
                     {
-                        login.menu(accounts, backups, index);
+                        login.menu(accounts, backups, community, index);
                     }
 
                     break;
@@ -47,11 +48,11 @@ public class Main {
                     break;
             }
         }
-        System.out.println("Users registed: ["+accounts.size()+"]");
+        System.out.println("\nUsers registed: ["+accounts.size()+"]");
 
         for(int i=0; i<accounts.size(); i++)
         {
-            System.out.println(accounts.get(i).user);
+            System.out.println(accounts.get(i).getUser());
         }
     }
 }
