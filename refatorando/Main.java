@@ -35,7 +35,7 @@ public class Main {
                     break;
 
                 case 2:
-                    
+                    System.out.printf("\n");
                     Register register = new Register();
                     register.setRigister(accounts);
                     break;
@@ -48,11 +48,19 @@ public class Main {
                     break;
             }
         }
-        System.out.println("\nUsers registed: ["+accounts.size()+"]");
+        System.out.println("\nUsers registed: ["+accounts.size()+"]:");
 
         for(int i=0; i<accounts.size(); i++)
         {
-            System.out.println(accounts.get(i).getUser());
+            System.out.println("-->"+accounts.get(i).getUser());
         }
+
+        System.out.println("\nCommunities registed: ["+community.size()+"]:");
+
+        for(int i=0; i<community.size(); i++)
+        {
+            System.out.println("-->"+community.get(i).getCommunity_name());
+        }
+
     }
 }
