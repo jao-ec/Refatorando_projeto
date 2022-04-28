@@ -40,7 +40,6 @@ public class Main {
                     break;
 
                 case 3:
-
                     active = false;
                     break;
 
