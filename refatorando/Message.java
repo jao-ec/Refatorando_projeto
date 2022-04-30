@@ -4,8 +4,9 @@ import java.util.Scanner;
 public class Message{
 
     Scanner input = new Scanner(System.in);
+    Search searcher = new Search();
 
-    protected String message;
+    private String message;
     private String from_user;
     private String to_user;
 
@@ -32,12 +33,14 @@ public class Message{
 
         if(!aux)
         {
-            System.out.println("\nUnregisterede user.\nSorry try another user or try again latter.");
-            return;
+            System.out.printf("\nUnregisterede user.\nSorry try another user or try again latter.\n");
+            input.nextLine();
         }
         else
         {
-            System.out.println("\nMessage send successfully");
+            accounts.get(searcher.search(accounts, this.getTo().intern())).messages.add(this);
+            System.out.printf("\nMessage send successfully.\n");
+            input.nextLine();
         }
     }
 
