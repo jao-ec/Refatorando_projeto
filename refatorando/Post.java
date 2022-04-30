@@ -6,17 +6,19 @@ public class Post
 
     private String title;
     private String content;
+    private String user;
     public boolean just_members;
      
-    public Post()
+    public Post(Profile self)
     {
+        this.user = self.getUser();
         setTitle();
         setcontent();
     }
 
     public String showPost()
     {
-        return "\t\t "+this.title+"\n"+this.content+"\n";
+        return "Post published by "+this.user+"\n\t\t "+this.title+"\n"+this.content+"\n\n";
     }
 
     public void setTitle()
