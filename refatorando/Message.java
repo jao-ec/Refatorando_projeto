@@ -1,31 +1,27 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Message{
+public class Message extends Message_abstract{
 
     Scanner input = new Scanner(System.in);
     Search searcher = new Search();
 
-    private String message;
-    private String from_user;
-    private String to_user;
-
-    public String show_message()
+    public String show()
     {
-        return "Hello "+this.to_user+", the "+this.from_user+" send the follow message:\n=>"+this.message+"\n";
+        return "Hello "+this.to+", the "+this.user+" send the follow message:\n=>"+this.content+"\n";
     }
 
     public Message(ArrayList<Profile> accounts, String who)
     {
-        setFrom_user(who);
-        setTo_user();
+        setFrom(who);
+        setTo();
         Boolean aux = false;
 
         for(int i=0; i< accounts.size(); i++)
         {
-            if(accounts.get(i).getUser().intern() == this.to_user.intern())
+            if(accounts.get(i).getUser().intern() == this.to.intern())
             {
-                setMessage();
+                setContent("");
                 aux = true;
                 break;
             }
@@ -44,26 +40,19 @@ public class Message{
         }
     }
 
-    public void setMessage()
+    public void setContent(String content)
     {
         System.out.printf("\nWrite bellow your message:\n=>");
-        this.message = input.nextLine();
+        this.content = input.nextLine();
     }
 
-    public void setFrom_user(String self_user)
-    {
-        this.from_user = self_user.intern();
-    }
-
-    public void setTo_user()
+    public void setTo()
     {
         System.out.printf("\nWho do you woukd like send the message:\n=>");
-        this.to_user = input.nextLine();
+        this.to = input.nextLine();
     }
 
-    public String getTo()
-    {
-        return this.to_user;
-    }
-    
+    public void setTitle() {
+       this.title = "***";
+    } 
 }
