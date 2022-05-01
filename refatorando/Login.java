@@ -122,10 +122,10 @@ public class Login
                             System.out.printf("\n");
                             for(int i=0; i<community.size(); i++)
                             {
-                                System.out.printf("-->"+community.get(i).showCommunity());
+                                System.out.printf(community.get(i).showCommunity());
+                                input.nextLine();
                             }
                             break;
-                        
                         ///////////////////////////////////////////////////////////////////////////////////////////////
                         case 4:
                             break;                
