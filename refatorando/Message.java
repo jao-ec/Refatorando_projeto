@@ -11,10 +11,13 @@ public class Message extends Message_abstract{
         return "Hello "+this.to+", the "+this.user+" send the follow message:\n=>"+this.content+"\n";
     }
 
-    public Message(ArrayList<Profile> accounts, String who)
+    public Message(ArrayList<Profile> accounts, String who, boolean reply, String user_to)
     {
         setFrom(who);
-        setTo();
+
+        if(!reply) setTo();
+        else this.to = user_to;
+        
         Boolean aux = false;
 
         for(int i=0; i< accounts.size(); i++)
