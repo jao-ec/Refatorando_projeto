@@ -136,7 +136,7 @@ public class Profile extends User
                     break;
                 //////////////////////////////////////////////////////////////////////////////////
                 case 4:
-                    new Message(accounts, this.getUser());
+                    new Message(accounts, this.getUser(), false, "");
                     break;
                 //////////////////////////////////////////////////////////////////////////////////
                 case 5:
@@ -201,10 +201,10 @@ public class Profile extends User
                         break;
 
                     case 2:
-                        new Message(accounts, this.getUser());
+                        new Message(accounts, this.getUser(), true, this.messages.get(i).getUser());
                         System.out.print("\nSuccessfully answered.\n");
                         break;
-                        
+
                     default:
                         break;
 
@@ -228,6 +228,7 @@ public class Profile extends User
                 for(int i=0; i<this.communities.size(); i++)
                 {
                     System.out.println(this.communities.get(i).showCommunity());
+                    input.nextLine();
                 }
             }
 
