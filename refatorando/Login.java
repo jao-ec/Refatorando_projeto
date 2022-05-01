@@ -123,7 +123,17 @@ public class Login
                             for(int i=0; i<community.size(); i++)
                             {
                                 System.out.printf(community.get(i).showCommunity());
+                                System.out.printf("\n[1] - Acess\n[2] - Continue\n[3] - Exit\n=>");
+                                choise2 = input.nextInt();
                                 input.nextLine();
+
+                                if(choise2 == 1)
+                                {
+                                    community.get(i).menuCommunity(self, accounts, community);
+                                }else if(choise2 == 2)
+                                {
+                                    continue;
+                                }else break;
                             }
                             break;
                         ///////////////////////////////////////////////////////////////////////////////////////////////
