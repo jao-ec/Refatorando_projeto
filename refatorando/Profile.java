@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Profile extends User 
 {
@@ -29,11 +30,141 @@ public class Profile extends User
                "\nCommunities: "+(communities.size()+admin_communities.size())+"\n";
     }
 
+    public void menuProfile(ArrayList<Profile> accounts)
+    {
+        int choise, choise2, aux;
+        String res;
+        boolean active = true;
+        Scanner input = new Scanner(System.in);
+        Search searcher = new Search();
+
+        while(active)
+        {
+            System.out.printf("\n[1] - Edit\n[2] - Add friend\n[3] - Invites\n"+
+                              "[4] - Send Message\n[5] - Read messages\n"+
+                              "[6] - Friends\n[7] - My communities\n[8] - Exit\n=>");
+            choise = input.nextInt();
+            input.nextLine();
+
+            switch(choise)
+            {
+                case 1:
+                    System.out.printf("\nWhat attribute do you want to edit?\n"+
+                                        "[1] - All attributes\n[2] - Name\n"+
+                                        "[3] - Gender\n[4] - Age\n[5] - Schooling\n"+
+                                        "[6] - Country\n[7] - About\n[8] - Exit\n=>");
+                    choise2 = input.nextInt();
+                    input.nextLine();
+
+                    switch(choise2)
+                    {
+                        case 1:
+                            this.edit();
+                            break;
+                        case 2:
+                            this.setName();
+                            break;
+                        case 3:
+                            this.setGender();
+                            break;
+                        case 4:
+                            this.setAge();
+                            break;
+                        case 5:
+                            this.setSchooling();
+                            break;
+                        case 6:
+                            this.setCountry();
+                            break;
+                        case 7:
+                            this.setAbout();
+                            break;
+                        case 8:
+                            break;
+                    }
+                    break;
+                ///////////////////////////////////////////////////////////////////////////
+                case 2:
+                    System.out.printf("\nWhat user would you like send a invite?\n=>");
+                    res = input.nextLine();
+
+                    aux = searcher.search(accounts, res);
+                    
+                    if(aux >= 0)
+                    {
+                        Invite convite = new Invite();
+                        convite.setUsername(this.getUser());
+                        convite.setInvite(this.apresentation(accounts.get(aux)));
+                        accounts.get(aux).invites.add(convite);
+                        System.out.printf("\nInvite send succefully.\n");
+                        input.nextLine();
+                    }
+                    else
+                    {
+                        System.out.printf("\nThis user is not registered yet.\n");
+                        input.nextLine();
+                    }
+                    break;
+                ///////////////////////////////////////////////////////////////////
+                case 3:
+                    if(this.invites.size() == 0)
+                    {
+                        System.out.printf("\nYou do not have any invite by for now.\n");
+                        input.nextLine();
+                    }
+                    else
+                    {
+                        for(int i=0; i<this.invites.size(); i++)
+                        {
+                            System.out.println("\n"+this.invites.get(i).getInvite_message());
+                            String user_friend = this.invites.get(i).getUsername();
+
+                            System.out.printf("Do you accept? [Y/N]");
+                            res = input.nextLine();
+
+                            if(res.toUpperCase().intern() == "Y")
+                            {
+                                Friend amigo1 = new Friend(this.getUser());
+                                Friend amigo2 = new Friend(accounts.get(searcher.search(accounts, user_friend)).getUser());
+
+                                this.friends.add(amigo2);
+                                accounts.get(searcher.search(accounts, user_friend)).friends.add(amigo1);
+                            }
+                        }
+                        this.invites.clear();
+                    }
+                    break;
+                //////////////////////////////////////////////////////////////////////////////////
+                case 4:
+                    new Message(accounts, this.getUser());
+                    break;
+                //////////////////////////////////////////////////////////////////////////////////
+                case 5:
+                    this.showMessages();
+                    break;
+                //////////////////////////////////////////////////////////////////////////////////
+                case 6:
+                    this.showFriends();
+                    break;
+                //////////////////////////////////////////////////////////////////////////////////
+                case 7:
+                    this.showCommunities();
+                    break;       
+                /////////////////////////////////////////////////////////////////////////////////
+                case 8:
+                    active = false;
+                    break;           
+            }
+        }    
+        input.close();
+    }
+
     public void showFriends()
     {
         if(this.friends.isEmpty())
         {
             System.out.printf("\nDoes not have any friend. [F for respect]\n");
+            input.nextLine();
         }
         else
         {
@@ -49,6 +180,7 @@ public class Profile extends User
         if(this.messages.isEmpty())
         {
             System.out.printf("\nDoes not have any message.\n");
+            input.nextLine();
         }
         else
         {
@@ -64,6 +196,7 @@ public class Profile extends User
         if(this.communities.isEmpty() && this.admin_communities.isEmpty())
         {
             System.out.printf("\nDoes not have any community on your account.\n");
+            input.nextLine();
         }
         else
         {
