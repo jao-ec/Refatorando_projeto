@@ -233,14 +233,14 @@ public class Community {
         {
             if(member)
             {
-                System.out.println("\n"+this.newsletters.get(i).showPost());
+                System.out.println("\n"+this.newsletters.get(i).show());
                 input.nextLine();
             }
             else
             {
                 if(!this.newsletters.get(i).just_members)
                 {
-                    System.out.println("\n"+this.newsletters.get(i).showPost());
+                    System.out.println("\n"+this.newsletters.get(i).show());
                     input.nextLine();
                 }
             }
@@ -272,7 +272,7 @@ public class Community {
     {
         for(int i=0; i<this.messages.size(); i++)
         {
-            System.out.println(this.messages.get(i).show_message());
+            System.out.println(this.messages.get(i).show());
             System.out.printf("\nWould you like delete this message? [Y/N]\n=>");
             res = input.nextLine();
 
