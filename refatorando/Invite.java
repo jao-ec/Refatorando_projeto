@@ -1,26 +1,33 @@
-public class Invite {
+import java.util.Scanner;
 
-    private String username;
-    private String invite_message;
+public class Invite extends Message_abstract
+{
+    Scanner input = new Scanner(System.in);
 
-    public void setUsername(String username)
+    public Invite(String from)
     {
-        this.username = username;
+        setFrom(from);
     }
 
-    public void setInvite(String message)
+    public String show() 
     {
-        this.invite_message = message;
+        return "\nWho send: "+getUser()+"\n\t\t"+getTitle()+"\n"+getContent()+"\n";
     }
 
-    public String getUsername()
+    public void setTitle() 
     {
-        return this.username;
+        System.out.printf("what is you title invite?\n=>");
+        this.title = input.nextLine();   
     }
 
-    public String getInvite_message()
+    public void setContent(String content) 
     {
-        return this.invite_message;
+        this.content = content;
     }
 
+    public void setTo() 
+    {
+        System.out.printf("\nWhat user would you like send a invite?\n=>");
+        this.to = input.nextLine();
+    }
 }
