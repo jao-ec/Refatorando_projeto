@@ -1,22 +1,19 @@
 import java.util.Scanner;
 
-public class Post 
+public class Post extends Message_abstract
 {
     Scanner input = new Scanner(System.in);
 
-    private String title;
-    private String content;
-    private String user;
     public boolean just_members;
      
     public Post(Profile self)
     {
         this.user = self.getUser();
         setTitle();
-        setcontent();
+        setContent("");
     }
 
-    public String showPost()
+    public String show()
     {
         return "Post published by "+this.user+"\n\t\t "+this.title+"\n"+this.content+"\n\n";
     }
@@ -27,9 +24,14 @@ public class Post
         this.title = input.nextLine();
     }
 
-    public void setcontent()
+    public void setContent(String content)
     {
         System.out.printf("\nWhat is your post:\n=>");
         this.content = input.nextLine();
+    }
+
+    public void setTo() 
+    {
+        this.to = "Type community post";
     }
 }
