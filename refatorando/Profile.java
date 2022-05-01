@@ -3,11 +3,15 @@ import java.util.Scanner;
 
 public class Profile extends User 
 {
+    Scanner input = new Scanner(System.in);
+
     ArrayList<Friend>    friends           = new ArrayList<Friend>();
     ArrayList<Message>   messages          = new ArrayList<Message>();
     ArrayList<Invite>    invites           = new ArrayList<Invite>();
     ArrayList<Community> communities       = new ArrayList<Community>();
     ArrayList<Community> admin_communities = new ArrayList<Community>();
+
+    int choise;
 
     public Profile()
     {
@@ -35,7 +39,6 @@ public class Profile extends User
         int choise, choise2, aux;
         String res;
         boolean active = true;
-        Scanner input = new Scanner(System.in);
         Search searcher = new Search();
 
         while(active)
@@ -85,16 +88,13 @@ public class Profile extends User
                     break;
                 ///////////////////////////////////////////////////////////////////////////
                 case 2:
-                    System.out.printf("\nWhat user would you like send a invite?\n=>");
-                    res = input.nextLine();
-
-                    aux = searcher.search(accounts, res);
+                    Invite convite = new Invite(this.getUser());
+                    convite.setTo();
+                    aux = searcher.search(accounts, convite.getTo());
                     
                     if(aux >= 0)
                     {
-                        Invite convite = new Invite();
-                        convite.setUsername(this.getUser());
-                        convite.setInvite(this.apresentation(accounts.get(aux)));
+                        convite.setContent(this.apresentation(accounts.get(aux)));
                         accounts.get(aux).invites.add(convite);
                         System.out.printf("\nInvite send succefully.\n");
                         input.nextLine();
@@ -116,8 +116,8 @@ public class Profile extends User
                     {
                         for(int i=0; i<this.invites.size(); i++)
                         {
-                            System.out.println("\n"+this.invites.get(i).getInvite_message());
-                            String user_friend = this.invites.get(i).getUsername();
+                            System.out.println("\n"+this.invites.get(i).getContent());
+                            String user_friend = this.invites.get(i).getUser();
 
                             System.out.printf("Do you accept? [Y/N]");
                             res = input.nextLine();
@@ -140,7 +140,7 @@ public class Profile extends User
                     break;
                 //////////////////////////////////////////////////////////////////////////////////
                 case 5:
-                    this.showMessages();
+                    this.showMessages(accounts);
                     break;
                 //////////////////////////////////////////////////////////////////////////////////
                 case 6:
@@ -156,7 +156,6 @@ public class Profile extends User
                     break;           
             }
         }    
-        input.close();
     }
 
     public void showFriends()
@@ -170,12 +169,13 @@ public class Profile extends User
         {
             for(int i=0; i<this.friends.size(); i++)
             {
-                System.out.println(this.friends.get(i).getUsername());
+                System.out.println("-->"+this.friends.get(i).getUsername());
             }
+            input.nextLine();
         }
     }
 
-    public void showMessages()
+    public void showMessages(ArrayList<Profile> accounts)
     {
         if(this.messages.isEmpty())
         {
@@ -186,8 +186,31 @@ public class Profile extends User
         {
             for(int i=0; i<this.messages.size(); i++)
             {
-                System.out.printf(this.messages.get(i).show_message());
+                System.out.printf(this.messages.get(i).show());
+                System.out.printf("\n[1] - Delet this message\n[2] - Reply\n[3] - Continue\n=>");
+                choise = input.nextInt();
+                input.nextLine();
+
+                switch(choise)
+                {
+                    case 1:
+                        this.messages.remove(i);
+                        i--;
+                        System.out.printf("\nMessage deleted successfully.\n");
+                        input.nextLine();
+                        break;
+
+                    case 2:
+                        new Message(accounts, this.getUser());
+                        System.out.print("\nSuccessfully answered.\n");
+                        break;
+                        
+                    default:
+                        break;
+
+                }
             }
+            System.out.printf("\nEvery message was read.\n");
         }
     }
 
