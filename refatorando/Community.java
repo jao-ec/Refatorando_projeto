@@ -8,7 +8,7 @@ public class Community {
 
     ArrayList<Friend>   members     = new ArrayList<Friend>();
     ArrayList<Post>     newsletters = new ArrayList<Post>();
-    ArrayList<Message>  messages    = new ArrayList<Message>();
+    ArrayList<MessageCommunity>  messages    = new ArrayList<MessageCommunity>();
 
     private String user_admin;
     private String name_community;
@@ -32,6 +32,7 @@ public class Community {
                "Community name: " +this.name_community +"\n"+
                "Community theme: "+this.theme_community+"\n"+
                "Community about: "+this.about_community+"\n"+
+               "Messages: "       +this.messages.size()+"\n"+
                "Members amount: " +members.size()      +"\n"+
                "Post amount: "    +newsletters.size()  +"\n";
     }
@@ -40,8 +41,8 @@ public class Community {
     {
         active = true;
         member = false;
-        String noMember = "\n[1] - Entry\n[2] - Members\n[3] - Newsletters\n[4] - Exit\n=>";
-        String Member = "\n[1] - Leave the community\n[2] - Members\n[3] - Newsletters\n[4] - Exit\n=>";
+        String noMember = "\n[1] - Entry\n[2] - Send a message\n[3] - Members\n[4] - Newsletters\n[5] - Exit\n=>";
+        String Member = "\n[1] - Leave the community\n[2] - Send a message\n[3] - Members\n[4] - Newsletters\n[5] - Exit\n=>";
         String adminMember = "\n[1] - Members\n[2] - Messages\n[3] - Newsletters\n[4] - Delete community\n[5] - Exit\n=>";
 
         for(int i=0; i<this.members.size(); i++)
@@ -94,10 +95,15 @@ public class Community {
                     break;
             ////////////////////////////////////////////////////////////////////////////////////////////
             case 2:
+               MessageCommunity message = new MessageCommunity(this.getCommunity_name(), self.getUser());
+               this.messages.add(message);
+               break;
+            ////////////////////////////////////////////////////////////////////////////////////////////
+            case 3:
                 this.showMembers();
                 break;
             ///////////////////////////////////////////////////////////////////////////////////////////
-            case 3:
+            case 4:
             System.out.printf("\n[1] - See Posts\n[2] - Exit\n=>");
             choise2 = input.nextInt();
             input.nextLine();
@@ -112,7 +118,7 @@ public class Community {
             }
             break;
             //////////////////////////////////////////////////////////////////////////////////////////////
-            case 4:
+            case 5:
                 return false;
         }
         return true;
@@ -146,10 +152,15 @@ public class Community {
                 break;
             //////////////////////////////////////////////////////////////////////////////////////////////
             case 2:
+                MessageCommunity message = new MessageCommunity(this.getCommunity_name(), self.getUser());
+                this.messages.add(message);
+                break;
+            ////////////////////////////////////////////////////////////////////////////////////////////////
+            case 3:
                 this.showMembers();
                 break;
             ///////////////////////////////////////////////////////////////////////////////////////////////
-            case 3:
+            case 4:
                 System.out.printf("\n[1] - Make a post\n[2] - See Posts\n[3] - Exit\n=>");
                 choise2 = input.nextInt();
                 input.nextLine();
@@ -170,7 +181,7 @@ public class Community {
                 }
                 break;
             //////////////////////////////////////////////////////////////////////////////////////////////
-            case 4:
+            case 5:
                 return false;
         }
         return true;
@@ -270,6 +281,12 @@ public class Community {
 
     public void showMessages()
     {
+        if(this.messages.isEmpty())
+        {
+            System.out.printf("\nThis community does not have any message admin.\n");
+            input.nextLine();
+            return;
+        }
         for(int i=0; i<this.messages.size(); i++)
         {
             System.out.println(this.messages.get(i).show());
@@ -278,7 +295,8 @@ public class Community {
 
             if(res.toUpperCase().intern() == "Y")
             {
-                this.messages.remove(messages.get(i));
+                this.messages.remove(i);
+                --i;
             }
         }
     }
