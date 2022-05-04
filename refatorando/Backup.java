@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Backup implements Base
+public class Backup implements Gets
 {   
     private String user;
     private String name;
@@ -27,7 +27,7 @@ public class Backup implements Base
         
         for(int i=0; i<backup.admin_communities.size(); i++)
         {
-            communities.add(backup.admin_communities.get(i));
+            this.communities.add(backup.admin_communities.get(i));
         }
     }
 
