@@ -1,4 +1,4 @@
-public interface Base {
+public interface Gets {
     public String getName();
     public String getGender();
     public String getAge();
