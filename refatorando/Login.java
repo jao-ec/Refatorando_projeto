@@ -166,6 +166,7 @@ public class Login
                 ///////////////////////////////////////////////////////////////////////////////////////////////////    
                 case 4:
                     Backup conta = new Backup(self);
+                    self.delete(accounts, community);
                     accounts.remove(accounts.get(searcher.search(accounts, self.getUser())));
                     backups.add(conta);
                     active = false;
