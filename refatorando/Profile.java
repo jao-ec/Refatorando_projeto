@@ -4,6 +4,7 @@ import java.util.Scanner;
 public class Profile extends User 
 {
     Scanner input = new Scanner(System.in);
+    Search searcher = new Search();
 
     ArrayList<Friend>    friends           = new ArrayList<Friend>();
     ArrayList<Message>   messages          = new ArrayList<Message>();
@@ -240,5 +241,51 @@ public class Profile extends User
                 }
             }
         }
+    }
+
+    public void delete(ArrayList<Profile> accounts, ArrayList<Community> community)
+    {
+        //saindo das comuniddes que faço parte
+        for(int i=0; i<communities.size(); i++)
+        {
+            for(int j=0; j<this.communities.get(i).members.size(); j++)
+            {
+                if(this.communities.get(i).members.get(j).getUsername().intern() == this.getUser().intern())
+                {
+                    this.communities.get(i).members.remove(j);
+                    break;
+                }
+            }
+        }
+
+        //desfazendo as amizades
+        for(int i=0; i<friends.size(); i++)
+        {
+            Profile P = accounts.get(searcher.search(accounts, friends.get(i).getUsername()));
+
+            for(int j=0; j<P.friends.size(); j++)
+            {
+                if(P.friends.get(j).getUsername().intern() == this.user.intern())
+                {
+                    P.friends.remove(j);
+                    break;
+                }
+            }
+        }
+
+        //deletando as comunidades qeu eu criei
+        for(int i=0; i<admin_communities.size(); i++)
+        {
+            for(int j=0; j<community.size(); j++)
+            {
+                if(community.get(j).getCommunity_name().intern() == this.admin_communities.get(i).getCommunity_name().intern())
+                {
+                    community.remove(j);
+                    break;
+                }
+            }
+            this.admin_communities.get(i).delet(accounts);
+        }
+
     }
 }
