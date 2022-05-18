@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class User implements Base
+public class User implements Gets
 {
     Scanner input = new Scanner(System.in);
 
